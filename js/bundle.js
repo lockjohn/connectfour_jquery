@@ -97,6 +97,17 @@ eval("const MoveError = __webpack_require__(/*! ./moveError */ \"./js/moveError.
 
 /***/ }),
 
+/***/ "./js/c4-view.js":
+/*!***********************!*\
+  !*** ./js/c4-view.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("class View {\n  constructor(game, $container) {\n    this.$container = $container;\n    this.game = game;\n\n    this.setupBoard($container);\n    this.bindEvents();\n  }\n\n  //install event handler for li's and clicks and bind event to makeMove which will call playMove(pos);\n  bindEvents() {\n    this.$container.on(\"click\", \"li\", event => {\n      const $square = $(event.currentTarget);\n      console.log($square);\n      this.makeMove($square);\n    });\n  }\n\n  makeMove($square) {\n    const pos = $square.data(\"pos\");\n\n    try {    \n      this.game.playMove(pos); \n    } catch (e) {\n      alert(\"This \" + e.msg.toLowerCase());\n      return;\n     }\n\n    $square\n      .html(`${this.game.currentPlayer}`)\n      .addClass(\"played\")\n      .addClass(`${this.game.currentPlayer}`)\n      .removeClass(\"square\");\n\n    if (this.game.isOver()) {\n      this.$container.off('click');\n      this.$container.addClass('game-over');\n      \n      const winner = this.game.winner();\n      \n      const $figcaption = $(\"<figcaption>\");\n\n      if (winner) {\n        this.$container.addClass(`winner-${winner}`);\n        $figcaption.html(`You win, ${winner}`);\n\n      } else {\n        console.log('got here in conditional')\n        $figcaption.html(`It's a draw`);\n      }\n\n      this.$container.append($figcaption);\n    }\n  }\n\n  setupBoard($container) {\n    const $board = $('<ul class=\"board\"></ul>').appendTo($container);\n\n    for (let i = 0; i < 3; i++) {\n      for (let j = 0; j < 3; j++) {\n        let $li = $(\"<li>\");\n        $li\n          .data(\"pos\", [i, j])\n          .addClass(\"square\")\n          .appendTo($board);\n      }\n    }\n  }\n}\n\nmodule.exports = View;\n\n\n//# sourceURL=webpack:///./js/c4-view.js?");
+
+/***/ }),
+
 /***/ "./js/game.js":
 /*!********************!*\
   !*** ./js/game.js ***!
@@ -115,7 +126,7 @@ eval("const Board = __webpack_require__(/*! ./board */ \"./js/board.js\");\ncons
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const View = __webpack_require__(/*! ./ttt-view */ \"./js/ttt-view.js\")\nconst Game = __webpack_require__(/*! ./game */ \"./js/game.js\")\n\n$( () => {\n  const $container = $('.ttt');\n  const game = new Game();\n  new View(game, $container);\n  });\n\n\n//# sourceURL=webpack:///./js/main.js?");
+eval("const View = __webpack_require__(/*! ./c4-view */ \"./js/c4-view.js\")\nconst Game = __webpack_require__(/*! ./game */ \"./js/game.js\")\n\n$( () => {\n  const $container = $('.c4');\n  const game = new Game();\n  new View(game, $container);\n  });\n\n\n//# sourceURL=webpack:///./js/main.js?");
 
 /***/ }),
 
@@ -127,17 +138,6 @@ eval("const View = __webpack_require__(/*! ./ttt-view */ \"./js/ttt-view.js\")\n
 /***/ (function(module, exports) {
 
 eval("\nconst MoveError = function (msg) { this.msg = msg; };\n\n// MoveError really should be a child class of the built in Error object provided\n// by Javascript, but since we haven't covered inheritance yet, we'll just\n// let it be a vanilla Object for now!\n\nmodule.exports = MoveError;\n\n\n//# sourceURL=webpack:///./js/moveError.js?");
-
-/***/ }),
-
-/***/ "./js/ttt-view.js":
-/*!************************!*\
-  !*** ./js/ttt-view.js ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("class View {\n  constructor(game, $container) {\n    this.$container = $container;\n    this.game = game;\n\n    this.setupBoard($container);\n    this.bindEvents();\n  }\n\n  //install event handler for li's and clicks and bind event to makeMove which will call playMove(pos);\n  bindEvents() {\n    this.$container.on(\"click\", \"li\", event => {\n      const $square = $(event.currentTarget);\n      console.log($square);\n      this.makeMove($square);\n    });\n  }\n\n  makeMove($square) {\n    const pos = $square.data(\"pos\");\n\n    try {    \n      this.game.playMove(pos); \n    } catch (e) {\n      alert(\"This \" + e.msg.toLowerCase());\n      return;\n     }\n\n    $square\n      .html(`${this.game.currentPlayer}`)\n      .addClass(\"played\")\n      .addClass(`${this.game.currentPlayer}`)\n      .removeClass(\"square\");\n\n    if (this.game.isOver()) {\n      this.$container.off('click');\n      this.$container.addClass('game-over');\n      \n      const winner = this.game.winner();\n      \n      const $figcaption = $(\"<figcaption>\");\n\n      if (winner) {\n        this.$container.addClass(`winner-${winner}`);\n        $figcaption.html(`You win, ${winner}`);\n\n      } else {\n        console.log('got here in conditional')\n        $figcaption.html(`It's a draw`);\n      }\n\n      this.$container.append($figcaption);\n    }\n  }\n\n  setupBoard($container) {\n    const $board = $('<ul class=\"board\"></ul>').appendTo($container);\n\n    for (let i = 0; i < 3; i++) {\n      for (let j = 0; j < 3; j++) {\n        let $li = $(\"<li>\");\n        $li\n          .data(\"pos\", [i, j])\n          .addClass(\"square\")\n          .appendTo($board);\n      }\n    }\n  }\n}\n\nmodule.exports = View;\n\n\n//# sourceURL=webpack:///./js/ttt-view.js?");
 
 /***/ })
 
