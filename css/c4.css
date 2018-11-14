@@ -1,0 +1,76 @@
+html, body, figure, figcaption, ul, li, h1 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  text-align: inherit;
+}
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 60px;
+  margin: 30px;
+}
+
+li {
+    display:inline-block;
+    height: 90px;
+    margin: 8px;
+    align-self: center;
+}
+
+.board {
+    margin: 30px auto;
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    width: 360px;
+    height: 370px;
+    border-radius: 10px;
+    background-color: dodgerblue;
+}
+.square {
+    flex-basis: 88px;
+    background-color: slategray;
+    border: 6px #49fb35 solid;
+    border-radius: 10px;
+}
+
+.square:hover {
+    background-color: yellow;
+}
+
+.played {
+    color: white;
+    font-size: 5em;
+    flex-basis: 88px;
+    background-color: magenta;
+    border: 6px cyan solid;
+    border-radius: 10px;
+}
+
+.winner-x .x,
+.winner-o .o {
+  background: yellow;
+  color: red;
+}
+
+.game-over  li {
+  color: black;
+  cursor: default;
+  background: white;
+}
+
+.x, .o {    
+ text-align: center;
+}
+
+figcaption {
+  font-size: 30px;
+}
