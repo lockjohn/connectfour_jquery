@@ -16,6 +16,7 @@ h1 {
   font-size: 60px;
   margin: 30px;
   color: #ff8d1e;
+  text-transform: uppercase;
 }
 
 li {
@@ -95,7 +96,7 @@ li {
   background: #ff1e90;
 }
 
-.game-over  li {
+.game-over  div {
   color: black;
   cursor: default;
   background: white;
@@ -107,5 +108,6 @@ li {
 
 figcaption {
   font-size: 30px;
-  margin-top: 20px;
+  margin-top: 30px;
+  padding: 2px;
 }
