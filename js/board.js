@@ -7,10 +7,10 @@ class Board {
 
   isEmptyPos(pos) {
     if (!Board.isValidPos(pos)) {
-      throw new MoveError('Is not valid position!');
+      throw new MoveError("Is not valid position!");
     }
 
-    return (this.grid[pos[0]][pos[1]] === null);
+    return this.grid[pos[0]][pos[1]] === null;
   }
 
   isOver() {
@@ -18,8 +18,8 @@ class Board {
       return true;
     }
 
-    for (let rowIdx = 0; rowIdx < 3; rowIdx++) {
-      for (let colIdx = 0; colIdx < 3; colIdx++) {
+    for (let rowIdx = 0; rowIdx < 6; rowIdx++) {
+      for (let colIdx = 0; colIdx < 7; colIdx++) {
         if (this.isEmptyPos([rowIdx, colIdx])) {
           return false;
         }
@@ -31,88 +31,145 @@ class Board {
 
   placeMark(pos, mark) {
     if (!this.isEmptyPos(pos)) {
-      throw new MoveError('Is not an empty position!');
+      throw new MoveError("Is not an empty position!");
     }
 
     this.grid[pos[0]][pos[1]] = mark;
   }
 
-  print() {
-    const strs = [];
-    for (let rowIdx = 0; rowIdx < 3; rowIdx++) {
-      const marks = [];
-      for (let colIdx = 0; colIdx < 3; colIdx++) {
-        marks.push(
-          this.grid[rowIdx][colIdx] ? this.grid[rowIdx][colIdx] : " "
-        );
-      }
-      strs.push(`${marks.join('|')}\n`);
-    }
-
-    console.log(strs.join('-----\n'));
-  }
-
   winner() {
-    const posSeqs = [
-      // horizontals
-      [[0, 0], [0, 1], [0, 2]],
-      [[1, 0], [1, 1], [1, 2]],
-      [[2, 0], [2, 1], [2, 2]],
-      // verticals
-      [[0, 0], [1, 0], [2, 0]],
-      [[0, 1], [1, 1], [2, 1]],
-      [[0, 2], [1, 2], [2, 2]],
-      // diagonals
-      [[0, 0], [1, 1], [2, 2]],
-      [[2, 0], [1, 1], [0, 2]]
-    ];
-
-    for (let i = 0; i < posSeqs.length; i++) {
-      const winner = this.winnerHelper(posSeqs[i]);
-      if (winner != null) {
-        return winner;
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 7; j++) {
+        //rows
+        // console.log(i,j);
+        if (j < 4) {
+          if (this.winnerHelper([[i, j], [i, j + 1], [i, j + 2], [i, j + 3]])) {
+            return this.winnerHelper([
+              [i, j],
+              [i, j + 1],
+              [i, j + 2],
+              [i, j + 3]
+            ]);
+          }
+        }
+        //check columns
+        if (i < 3) {
+          if (this.winnerHelper([[i, j], [i + 1, j], [i + 2, j], [i + 3, j]])) {
+            return this.winnerHelper([
+              [i, j],
+              [i + 1, j],
+              [i + 2, j],
+              [i + 3, j]
+            ]);
+          }
+        }
       }
     }
-
+    //check diagonal
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 7; j++) {
+        if (j <= 3 && i <= 2) {
+          //diag right and down
+          if (
+            this.winnerHelper([
+              [i, j],
+              [i + 1, j + 1],
+              [i + 2, j + 2],
+              [i + 3, j + 3]
+            ])
+          ) {
+            return this.winnerHelper([
+              [i, j],
+              [i + 1, j + 1],
+              [i + 2, j + 2],
+              [i + 3, j + 3]
+            ]);
+          }
+        } else if (i > 2 && j <= 3) {
+          //diag right and up
+          if (
+            this.winnerHelper([
+              [i, j],
+              [i - 1, j + 1],
+              [i - 2, j + 2],
+              [i - 3, j + 3]
+            ])
+          ) {
+            return this.winnerHelper([
+              [i, j],
+              [i - 1, j + 1],
+              [i - 2, j + 2],
+              [i - 3, j + 3]
+            ]);
+          }
+        } else if (i > 2 && j >= 3) {
+          // diag left and up
+          if (
+            this.winnerHelper([
+              [i, j],
+              [i - 1, j - 1],
+              [i - 2, j - 2],
+              [i - 3, j - 3]
+            ])
+          ) {
+            return this.winnerHelper([
+              [i, j],
+              [i - 1, j - 1],
+              [i - 2, j - 2],
+              [i - 3, j - 3]
+            ]);
+          }
+        } else if (i <= 2 && j >= 3) {
+          // diag left and down
+          if (
+            this.winnerHelper([
+              [i, j],
+              [i + 1, j - 1],
+              [i + 2, j - 2],
+              [i + 3, j - 3]
+            ])
+          ) {
+            return this.winnerHelper([
+              [i, j],
+              [i + 1, j - 1],
+              [i + 2, j - 2],
+              [i + 3, j - 3]
+            ]);
+          }
+        }
+      }
+    }
     return null;
   }
 
-  winnerHelper(posSeq) {
-    for (let markIdx = 0; markIdx < Board.marks.length; markIdx++) {
-      const targetMark = Board.marks[markIdx];
-      let winner = true;
-      for (let posIdx = 0; posIdx < 3; posIdx++) {
-        const pos = posSeq[posIdx];
-        const mark = this.grid[pos[0]][pos[1]];
-        if (mark != targetMark) {
-          winner = false;
-        }
-      }
-
-      if (winner) {
-        if (targetMark == 'o') {
-          return 'x'
-        } else {
-        return 'o' }
-      }
+  winnerHelper(array) {
+    let grid = this.grid;
+    let first = grid[array[0][0]][array[0][1]];
+    let second = grid[array[1][0]][array[1][1]];
+    let third = grid[array[2][0]][array[2][1]];
+    let fourth = grid[array[3][0]][array[3][1]];
+  
+    if (
+      first == second &&
+      third == fourth &&
+      first == fourth &&
+      first !== null
+    ) {
+      return first;
     }
-
     return null;
   }
 
   static isValidPos(pos) {
-    return (0 <= pos[0]) &&
-    (pos[0] < 3) &&
-    (0 <= pos[1]) &&
-    (pos[1] < 3);
+    return 0 <= pos[0] && pos[0] < 6 && 0 <= pos[1] && pos[1] < 7;
   }
 
   static makeGrid() {
     const grid = [];
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 6; i++) {
       grid.push([]);
-      for (let j = 0; j < 3; j++) {
+      for (let j = 0; j < 7; j++) {
         grid[i].push(null);
       }
     }
@@ -121,6 +178,6 @@ class Board {
   }
 }
 
-Board.marks = ['x', 'o'];
+Board.marks = ["red", "yellow"];
 
 module.exports = Board;

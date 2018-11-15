@@ -11,28 +11,36 @@ class View {
   bindEvents() {
     this.$container.on("click", "li", event => {
       const $square = $(event.currentTarget);
-      console.log($square);
+    
       this.makeMove($square);
     });
   }
 
   makeMove($square) {
-    const pos = $square.data("pos");
-
-    try {    
-      this.game.playMove(pos); 
+    const col = $square.data("col");
+    let pos;
+    const player = this.game.currentPlayer;
+    try {   
+      for (let i = 5; i >= 0; i--) {
+        if (this.game.board.isEmptyPos([i,col])) {
+          pos = [i, col] 
+          this.game.playMove(pos); 
+          break;
+        }}
     } catch (e) {
       alert("This " + e.msg.toLowerCase());
       return;
      }
 
-    $square
-      .html(`${this.game.currentPlayer}`)
-      .addClass("played")
-      .addClass(`${this.game.currentPlayer}`)
-      .removeClass("square");
+    let $circle = $(".board").find(`[data-pos="${pos}"]`);
+   
 
-    if (this.game.isOver()) {
+    $circle
+      .append(`<div class="played ${player}" id="id1"></div>`);
+      
+// .removeClass("square");
+
+    if (this.game.winner() || this.game.isOver()) {
       this.$container.off('click');
       this.$container.addClass('game-over');
       
@@ -45,7 +53,7 @@ class View {
         $figcaption.html(`You win, ${winner}`);
 
       } else {
-        console.log('got here in conditional')
+      
         $figcaption.html(`It's a draw`);
       }
 
@@ -56,11 +64,12 @@ class View {
   setupBoard($container) {
     const $board = $('<ul class="board"></ul>').appendTo($container);
 
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 7; j++) {
         let $li = $("<li>");
+        $li.attr("data-col", [j]);
         $li
-          .data("pos", [i, j])
+          .attr("data-pos", [i, j])
           .addClass("square")
           .appendTo($board);
       }

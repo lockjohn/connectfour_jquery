@@ -30,8 +30,8 @@ li {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-    width: 360px;
-    height: 370px;
+    width: 880px;
+    height: 730px;
     border-radius: 10px;
     background-color: dodgerblue;
 }
@@ -39,36 +39,53 @@ li {
     flex-basis: 88px;
     background-color: slategray;
     border: 6px #49fb35 solid;
-    border-radius: 10px;
+    border-radius: 50%;
 }
 
 .square:hover {
-    background-color: yellow;
+    background-color: whitesmoke;
 }
 
 .played {
-    color: white;
-    font-size: 5em;
+    animation-name: drop-in;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+ 
+    /* animation-fill-mode: forwards; */
     flex-basis: 88px;
-    background-color: magenta;
-    border: 6px cyan solid;
-    border-radius: 10px;
+    height: 90px;
+    /* border: 6px #49fb35 solid; */
+    border-radius: 50%;
+    margin-top: 0;
 }
 
-.winner-x .x,
-.winner-o .o {
+@keyframes drop-in {
+  0% {
+    margin-top: -1000%
+  }
+
+  100% {
+    margin-top: 0;
+  }
+}
+
+.red {
+  background: red;
+}
+
+.yellow {
   background: yellow;
-  color: red;
+}
+
+.winner-red .red,
+.winner-yellow .yellow {
+  background: purple;
 }
 
 .game-over  li {
   color: black;
   cursor: default;
   background: white;
-}
-
-.x, .o {    
- text-align: center;
 }
 
 figcaption {
