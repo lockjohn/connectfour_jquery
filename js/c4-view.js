@@ -5,6 +5,7 @@ class View {
 
     this.setupBoard($container);
     this.bindEvents();
+    this.bindReset();
   }
 
   //install event handler for li's and clicks and bind event to makeMove which will call playMove(pos);
@@ -13,6 +14,13 @@ class View {
       const $square = $(event.currentTarget);
     
       this.makeMove($square);
+    });
+  }
+
+  bindReset() {
+    $(":button").on("click", event => {
+      console.log('it logs event');
+      this.$container.attr("class", "played").addClass("drop");
     });
   }
 
@@ -36,7 +44,7 @@ class View {
    
 
     $circle
-      .append(`<div class="played ${player}" id="id1"></div>`);
+      .append(`<div class="played ${player}"></div>`);
       
 // .removeClass("square");
 

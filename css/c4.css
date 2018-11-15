@@ -15,6 +15,7 @@ body {
 h1 {
   font-size: 60px;
   margin: 30px;
+  color: #ff8d1e;
 }
 
 li {
@@ -34,16 +35,20 @@ li {
     height: 730px;
     border-radius: 10px;
     background-color: dodgerblue;
+    transition: margin-bottom 1s;
+  margin-bottom: -1000%;
 }
 .square {
     flex-basis: 88px;
     background-color: slategray;
-    border: 6px #49fb35 solid;
+    border: 6px #1eff8d solid;
     border-radius: 50%;
+    box-shadow: inset 3px 3px 4px rgba(0,0,0,0.7);
 }
 
 .square:hover {
     background-color: whitesmoke;
+    box-shadow: inset 3px 3px 4px rgba(0,0,0,0.7);
 }
 
 .played {
@@ -69,25 +74,38 @@ li {
   }
 }
 
+
+@keyframes drop-out {
+  100% {
+    transform: translateY(1000%);
+  }
+}
+
+
 .red {
-  background: red;
+  background: #ff1e20;
 }
 
 .yellow {
-  background: yellow;
+  background: #fffe1e;
 }
 
 .winner-red .red,
 .winner-yellow .yellow {
-  background: purple;
+  background: #ff1e90;
 }
 
 .game-over  li {
   color: black;
   cursor: default;
   background: white;
+  animation-name: drop-out;
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
 }
 
 figcaption {
   font-size: 30px;
+  margin-top: 20px;
 }

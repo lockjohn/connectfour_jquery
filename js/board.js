@@ -54,7 +54,10 @@ class Board {
         }
         //check columns
         if (i < 3) {
-          if (this.winnerHelper([[i, j], [i + 1, j], [i + 2, j], [i + 3, j]])) {
+          if (this.winnerHelper([[i, j], 
+            [i + 1, j], 
+            [i + 2, j], 
+            [i + 3, j]])) {
             return this.winnerHelper([
               [i, j],
               [i + 1, j],
